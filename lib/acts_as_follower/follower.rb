@@ -10,6 +10,7 @@ module ActsAsFollower #:nodoc:
         has_many :follows, :as => :follower, :dependent => :destroy
         include ActsAsFollower::Follower::InstanceMethods
         include ActsAsFollower::FollowerLib
+        include ActsAsFollower::FollowerBuilder
       end
     end
 
