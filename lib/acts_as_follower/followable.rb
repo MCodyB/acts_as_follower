@@ -24,7 +24,7 @@ module ActsAsFollower #:nodoc:
       def followers_by_type(follower_type, options={})
         follows = follower_type.constantize.
           joins(:follows).
-          where('follows.blocked'         => false,
+          where('follows.status'          => [0, 1],
                 'follows.followable_id'   => self.id,
                 'follows.followable_type' => parent_class_name(self),
                 'follows.follower_type'   => follower_type)

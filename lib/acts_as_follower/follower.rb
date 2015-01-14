@@ -28,9 +28,7 @@ module ActsAsFollower #:nodoc:
       # Creates a new follow record for this instance to follow the passed object.
       # Does not allow duplicate records to be created.
       def follow(followable)
-        if self != followable
-          self.follows.find_or_create_by(followable_id: followable.id, followable_type: parent_class_name(followable))
-        end
+        build_follower(followable)
       end
 
       # Deletes the follow record if it exists.
@@ -66,7 +64,7 @@ module ActsAsFollower #:nodoc:
       def following_by_type(followable_type, options={})
         followables = followable_type.constantize.
           joins(:followings).
-          where('follows.blocked'         => false,
+          where('follows.status'          => [0, 1],
                 'follows.follower_id'     => self.id,
                 'follows.follower_type'   => parent_class_name(self),
                 'follows.followable_type' => followable_type)

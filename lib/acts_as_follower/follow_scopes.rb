@@ -27,12 +27,23 @@ module ActsAsFollower #:nodoc:
     end
 
     def unblocked
-      where(:blocked => false)
+      where(status: [0, 1])
     end
 
     def blocked
-      where(:blocked => true)
+      where(status: 3)
     end
 
+    def pending
+      where(status: 2)
+    end
+
+    def full
+      where(status: 0)
+    end
+
+    def limited
+      where(status: 1)
+    end
   end
 end
