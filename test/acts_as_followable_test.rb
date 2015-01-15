@@ -130,6 +130,11 @@ class ActsAsFollowableTest < ActiveSupport::TestCase
           assert_equal 0, @jon.followers_count
         end
 
+        should "not be able to request again" do
+          @sam.follow(@jon)
+          assert_equal 0, @sam.requests_count
+        end
+
         should "not be present when listing followers" do
           assert_equal [], @jon.followers
         end
@@ -148,9 +153,14 @@ class ActsAsFollowableTest < ActiveSupport::TestCase
           assert_equal 1, @sam.blocked_followers_count
         end
 
-        should "not be able to follow again" do
+        should "not be able to follow" do
           @sam.follow(@jon)
           assert_equal 0, @sam.followers_count
+        end
+
+        should "not be able to request" do
+          @sam.follow(@jon)
+          assert_equal 0, @sam.requests_count
         end
 
         should "not be present when listing followers" do

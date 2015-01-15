@@ -3,7 +3,7 @@ module ActsAsFollower #:nodoc:
 
     def for_follower(follower)
       where(:follower_id => follower.id,
-            :follower_type => parent_class_name(follower))
+        :follower_type => parent_class_name(follower))
     end
 
     def for_followable(followable)
@@ -27,23 +27,23 @@ module ActsAsFollower #:nodoc:
     end
 
     def unblocked
-      where(status: [0, 1])
+      where(:status => [0, 1])
     end
 
     def blocked
-      where(status: 3)
+      where(:status => 3)
     end
 
     def pending
-      where(status: 2)
+      where(:status => 2)
     end
 
     def full
-      where(status: 0)
+      where(:status => 0)
     end
 
     def limited
-      where(status: 1)
+      where(:status => 1)
     end
   end
 end

@@ -20,6 +20,10 @@ module ActsAsFollower #:nodoc:
         self.followings.unblocked.count
       end
 
+      def requests_count
+        self.followings.pending.count
+      end
+
       # Returns the followers by a given type
       def followers_by_type(follower_type, options={})
         follows = follower_type.constantize.
@@ -101,7 +105,7 @@ module ActsAsFollower #:nodoc:
       private
 
       def block_future_follow(follower)
-        Follow.create(:followable => self, :follower => follower, :blocked => true)
+        Follow.create(:followable => self, :follower => follower, :status => 3)
       end
 
       def block_existing_follow(follower)

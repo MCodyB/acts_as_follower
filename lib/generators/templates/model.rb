@@ -3,7 +3,7 @@ class Follow < ActiveRecord::Base
   extend ActsAsFollower::FollowerLib
   extend ActsAsFollower::FollowScopes
 
-  enum status: { good: 0, limited: 1, pending: 2, blocked: 3 }
+  enum :status => { :good => 0, :limited => 1, :pending => 2, :blocked => 3 }
 
   # NOTE: Follows belong to the "followable" interface, and also to followers
   belongs_to :followable, :polymorphic => true
