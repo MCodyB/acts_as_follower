@@ -27,7 +27,13 @@ module ActsAsFollower #:nodoc:
     end
 
     def unblocked
-      where(:status => [0, 1])
+      where(:status => follower_nums)
+    end
+
+    Follow.statuses.each do |status, val|
+      self.class_eval <<-RUBY __FILE__, __LINE__
+      
+      RUBY
     end
 
     def blocked
@@ -45,5 +51,18 @@ module ActsAsFollower #:nodoc:
     def limited
       where(:status => 1)
     end
+
+    private
+    def follower_nums
+      @follow_nums ||= Follow.statuses.dup.delete_if do |status|
+        case status
+        when "blocked", "pending"
+          true
+        else
+          false
+        end
+      end.values
+    end
+
   end
 end
