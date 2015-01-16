@@ -14,7 +14,6 @@ class ActsAsFollowerTest < ActiveSupport::TestCase
       assert @sam.respond_to?(:stop_following)
       assert @sam.respond_to?(:follows_by_type)
       assert @sam.respond_to?(:all_follows)
-      assert @sam.respond_to?(:requests_count)
     end
   end
 

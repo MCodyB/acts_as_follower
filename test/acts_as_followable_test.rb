@@ -111,6 +111,47 @@ class ActsAsFollowableTest < ActiveSupport::TestCase
       end
     end
 
+    context "permits should" do
+      setup do
+        @bob = FactoryGirl.create(:bob)
+        @bob.follow_default = 2
+        @follow = @jon.follow(@bob)
+      end
+
+      should "not add him to followers" do
+        assert_equal 0, @bob.followers_count
+      end
+
+      should "not add him to blocked" do
+        assert_equal 0, @bob.followings.blocked.count
+      end
+
+      should "add him to pending count" do
+        assert_equal 1, @bob.followings.pending.count
+      end
+
+      should "be able to confirm" do
+        @follow.confirm(@bob, "good")
+        assert_equal 1, @bob.followers_count
+      end
+
+      should "be able to reject" do
+        @follow.confirm(@bob, "blocked")
+        assert_equal 1, @bob.followings.blocked.count
+      end
+
+      should "not confirm wrong user" do
+        @follow.confirm(@sam, "good")
+        assert_equal 1, @bob.followings.pending.count
+      end
+
+      should "only happen if new" do
+        @follow.confirm(@bob, "good")
+        @jon.follow(@bob)
+        assert_equal @bob.followers_count - 1, @bob.followings.pending.count
+      end
+    end
+
     context "blocking a follower" do
       context "in my following list" do
         setup do
@@ -132,7 +173,7 @@ class ActsAsFollowableTest < ActiveSupport::TestCase
 
         should "not be able to request again" do
           @sam.follow(@jon)
-          assert_equal 0, @sam.requests_count
+          assert_equal 0, @sam.followings.pending.count
         end
 
         should "not be present when listing followers" do
@@ -160,7 +201,7 @@ class ActsAsFollowableTest < ActiveSupport::TestCase
 
         should "not be able to request" do
           @sam.follow(@jon)
-          assert_equal 0, @sam.requests_count
+          assert_equal 0, @sam.followings.pending.count
         end
 
         should "not be present when listing followers" do

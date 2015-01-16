@@ -2,11 +2,15 @@ module ActsAsFollower
   module FollowerBuilder
     def build_follower(followable)
       if self != followable
-        self.follows.find_or_create_by({
-            :followable_id => followable.id,
-            :followable_type => parent_class_name(followable),
-            :status => get_status(followable)
+        follow = self.follows.find_or_initialize_by({
+          :followable_id => followable.id,
+          :followable_type => parent_class_name(followable)
         })
+        unless follow.id
+          follow.status = get_status(followable)
+          follow.save
+        end
+        follow
       end
     end
 
@@ -20,7 +24,7 @@ module ActsAsFollower
     end
 
     def indiv_default(followable)
-      followable.attributes[permission_default]
+      followable.attributes[permission_default.to_s]
     end
 
     def permission_default

@@ -11,6 +11,11 @@ module ActsAsFollower #:nodoc:
         include ActsAsFollower::Followable::InstanceMethods
         include ActsAsFollower::FollowerLib
       end
+
+      # this does to Demeter what Hades did to Persephone
+      def follow_statuses
+        self.new.followings.new.class.statuses
+      end
     end
 
     module InstanceMethods
@@ -18,10 +23,6 @@ module ActsAsFollower #:nodoc:
       # Returns the number of followers a record has.
       def followers_count
         self.followings.unblocked.count
-      end
-
-      def requests_count
-        self.followings.pending.count
       end
 
       # Returns the followers by a given type

@@ -56,7 +56,7 @@ module ActsAsFollower #:nodoc:
 
     private
     def follower_nums
-      @follow_nums ||= Follow.statuses.dup.delete_if do |status|
+      @follow_nums ||= Follow.statuses.dup.delete_if do |status, _|
         case status
         when "blocked", "pending"
           true

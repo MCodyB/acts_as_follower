@@ -11,7 +11,8 @@ ActiveRecord::Schema.define :version => 0 do
   end
 
   create_table :users, :force => true do |t|
-    t.column :name, :string
+    t.column :name,           :string
+    t.column :follow_default, :integer, :default => 0
   end
 
   create_table :bands, :force => true do |t|

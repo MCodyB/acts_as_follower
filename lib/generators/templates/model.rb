@@ -10,13 +10,12 @@ class Follow < ActiveRecord::Base
   belongs_to :follower,   :polymorphic => true
 
   def block!
-    self.update_attribute(:status, 3)
+    self.update_attribute(:status, "blocked")
   end
 
   def confirm(probably_current_user, confirm_val)
     if self.followable == probably_current_user
-      self.status = confirm_val
-      self.save
+      self.update_attribute(:status, confirm_val)
     end
   end
 end
