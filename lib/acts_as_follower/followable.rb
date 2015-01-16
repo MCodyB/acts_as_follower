@@ -11,11 +11,6 @@ module ActsAsFollower #:nodoc:
         include ActsAsFollower::Followable::InstanceMethods
         include ActsAsFollower::FollowerLib
       end
-
-      # this does to Demeter what Hades did to Persephone
-      def follow_statuses
-        self.new.followings.new.class.statuses
-      end
     end
 
     module InstanceMethods
