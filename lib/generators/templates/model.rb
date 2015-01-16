@@ -1,9 +1,9 @@
 class Follow < ActiveRecord::Base
+  # breaks tests
+  enum status: %w(good limited pending blocked) #<%= statuses %>
 
   extend ActsAsFollower::FollowerLib
   extend ActsAsFollower::FollowScopes
-
-  enum :status => <%= statuses %>
 
   # NOTE: Follows belong to the "followable" interface, and also to followers
   belongs_to :followable, :polymorphic => true

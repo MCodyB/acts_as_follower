@@ -31,26 +31,28 @@ module ActsAsFollower #:nodoc:
     end
 
     Follow.statuses.each do |status, val|
-      self.class_eval <<-RUBY __FILE__, __LINE__
-      
+      self.class_eval <<-RUBY, __FILE__, __LINE__ + 1
+        def #{status}
+          where(:status => #{val})
+        end
       RUBY
     end
 
-    def blocked
-      where(:status => 3)
-    end
-
-    def pending
-      where(:status => 2)
-    end
-
-    def full
-      where(:status => 0)
-    end
-
-    def limited
-      where(:status => 1)
-    end
+    # def blocked
+    #   where(:status => 3)
+    # end
+    #
+    # def pending
+    #   where(:status => 2)
+    # end
+    #
+    # def full
+    #   where(:status => 0)
+    # end
+    #
+    # def limited
+    #   where(:status => 1)
+    # end
 
     private
     def follower_nums
