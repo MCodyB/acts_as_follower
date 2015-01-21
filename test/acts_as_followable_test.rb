@@ -130,25 +130,25 @@ class ActsAsFollowableTest < ActiveSupport::TestCase
         assert_equal 1, @bob.followings.pending.count
       end
 
-      should "be able to confirm" do
-        @follow.confirm(@bob, "good")
+      should "be able to assign" do
+        @follow.assign(@bob, "good")
         assert_equal 1, @bob.followers_count
       end
 
       should "be able to reject" do
-        @follow.confirm(@bob, "blocked")
+        @follow.assign(@bob, "blocked")
         assert_equal 1, @bob.followings.blocked.count
       end
 
       should "not confirm wrong user" do
-        @follow.confirm(@sam, "good")
+        @follow.assign(@sam, "good")
         assert_equal 1, @bob.followings.pending.count
       end
 
       should "only happen if new" do
-        @follow.confirm(@bob, "good")
+        @follow.assign(@bob, "good")
         @jon.follow(@bob)
-        assert_equal @bob.followers_count - 1, @bob.followings.pending.count
+        assert_equal 0, @bob.followings.pending.count
       end
     end
 
@@ -230,7 +230,7 @@ class ActsAsFollowableTest < ActiveSupport::TestCase
       end
     end
 
-    context "unblock a non-existent follow" do
+    context "unblock a non existent follow" do
       setup do
         @sam.stop_following(@jon)
         @jon.unblock(@sam)

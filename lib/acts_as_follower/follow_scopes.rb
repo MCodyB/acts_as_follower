@@ -6,12 +6,12 @@ module ActsAsFollower #:nodoc:
         :follower_type => parent_class_name(follower))
     end
 
-    def for_followable(followable)
-      where(:followable_id => followable.id, :followable_type => parent_class_name(followable))
-    end
-
     def for_follower_type(follower_type)
       where(:follower_type => follower_type)
+    end
+
+    def for_followable(followable)
+      where(:followable_id => followable.id, :followable_type => parent_class_name(followable))
     end
 
     def for_followable_type(followable_type)
@@ -27,7 +27,7 @@ module ActsAsFollower #:nodoc:
     end
 
     def unblocked
-      where(:status => follower_nums)
+      where(:status => Follow.follower_nums)
     end
 
     Follow.statuses.each do |status, val|
@@ -37,34 +37,5 @@ module ActsAsFollower #:nodoc:
         end
       RUBY
     end
-
-    # def blocked
-    #   where(:status => 3)
-    # end
-    #
-    # def pending
-    #   where(:status => 2)
-    # end
-    #
-    # def full
-    #   where(:status => 0)
-    # end
-    #
-    # def limited
-    #   where(:status => 1)
-    # end
-
-    private
-    def follower_nums
-      @follow_nums ||= Follow.statuses.dup.delete_if do |status, _|
-        case status
-        when "blocked", "pending"
-          true
-        else
-          false
-        end
-      end.values
-    end
-
   end
 end
