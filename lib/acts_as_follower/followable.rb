@@ -48,9 +48,9 @@ module ActsAsFollower #:nodoc:
       # e.g. count_user_followers == followers_by_type_count('User')
       def method_missing(m, *args)
         if m.to_s[/count_(.+)_followers/]
-          followers_by_type_count($1.singularize.classify)
+          definer(m) { followers_by_type_count($1.singularize.classify) }
         elsif m.to_s[/(.+)_followers/]
-          followers_by_type($1.singularize.classify)
+          definer(m) { followers_by_type($1.singularize.classify) }
         else
           super
         end
@@ -111,6 +111,11 @@ module ActsAsFollower #:nodoc:
 
       def block_existing_follow(follower)
         get_follow_for(follower).block!
+      end
+
+      def definer(m, &block)
+        self.class.send(:define_method, m, &block)
+        self.method(m).call
       end
     end
 
